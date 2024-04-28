@@ -1,0 +1,4 @@
+tensorflow-datasets==4.9.4
+tensorflow-hub==0.16.1
+scipy==1.12.0
+tf-keras==2.16.0  # https://github.com/tensorflow/tensorflow/issues/63849#issuecomment-2002501172 

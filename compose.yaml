@@ -1,0 +1,25 @@
+services:
+  cd0375:
+    build: .
+    ipc: host
+    ulimits:
+      memlock: -1
+      stack: 67108864
+    volumes:
+      - ./home/:/home
+    ports:
+      - "${JUPYTER_PORT:-8888}:8888"
+      - "${TENSORBOARD_PORT:-6006}:6006"
+    environment:
+      # https://github.com/tensorflow/tensorflow/issues/63849#issuecomment-2002501172
+      - TF_USE_LEGACY_KERAS=1
+      - TF_CPP_MIN_LOG_LEVEL=2
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['${GPU_DEVICES}']
+              capabilities: [compute, utility]
+    working_dir: /home
+    command: jupyter-lab --ip=0.0.0.0 --no-browser --allow-root --NotebookApp.token="${JUPYTER_TOKEN}" --NotebookApp.password='' --notebook-dir=/home
